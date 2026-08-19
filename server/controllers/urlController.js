@@ -73,8 +73,33 @@ const getUrls = async (req, res) => {
     }
   };
 
+const deleteUrl = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const url = await URL.findByIdAndDelete(id);
+
+    if (!url) {
+      return res.status(404).json({
+        message: "URL not found"
+      });
+    }
+
+    res.status(200).json({
+      message: "URL deleted successfully"
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server error"
+    });
+  }
+};
+
 module.exports = {
     createShortUrl,
     redirectUrl,
-    getUrls
+    getUrls,
+    deleteUrl
 };

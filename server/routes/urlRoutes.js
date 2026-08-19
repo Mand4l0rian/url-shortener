@@ -3,7 +3,8 @@ const express = require("express");
 const {
     createShortUrl,
     getUrls,
-    redirectUrl
+    redirectUrl,
+    deleteUrl
 } = require("../controllers/urlController");
 
 const router = express.Router();
@@ -12,6 +13,6 @@ router.post("/", createShortUrl);
 
 router.get("/", getUrls);
 
-router.get("/:shortCode", redirectUrl);
+router.delete("/:id", deleteUrl);
 
 module.exports = router;
