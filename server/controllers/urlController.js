@@ -59,7 +59,22 @@ const redirectUrl = async (req, res) => {
     }
 };
 
+const getUrls = async (req, res) => {
+    try {
+      const urls = await URL.find().sort({ createdAt: -1 });
+  
+      res.status(200).json(urls);
+    } catch (error) {
+      console.error(error);
+  
+      res.status(500).json({
+        message: "Server error"
+      });
+    }
+  };
+
 module.exports = {
     createShortUrl,
-    redirectUrl
+    redirectUrl,
+    getUrls
 };

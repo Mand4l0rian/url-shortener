@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [urls, setUrls] = useState([]);
+
+
   const shortenUrl = async () => {
     if (!url) {
       setError("Please enter a URL");
@@ -33,12 +36,39 @@ function App() {
       }
   
       setShortUrl(data.shortUrl);
+      await getUrls();
     } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);
     }
   };
+
+
+  const getUrls = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/urls");
+  
+      const data = await response.json();
+  
+      setUrls(data);
+    } catch (error) {
+      console.error("Failed to fetch URLs:", error);
+    }
+  };
+
+
+  const handleShortUrlClick = () => {
+    setTimeout(() => {
+      getUrls();
+    }, 500);
+  };
+
+
+  useEffect(() => {
+    getUrls();
+  }, []);
+
 
   return (
     <div>
@@ -54,6 +84,7 @@ function App() {
       <button onClick={shortenUrl} disabled={loading}>
         {loading ? "Shortening..." : "Shorten URL"}
       </button>
+      {error && <p>{error}</p>}
       {shortUrl && (
         <p>
           Your shortened URL:{" "}
@@ -62,6 +93,33 @@ function App() {
           </a>
         </p>
       )}
+      <h2>URL History</h2>
+
+      {urls.map((item) => (
+        <div key={item._id}>
+          <p>
+            Original URL: {item.originalUrl}
+          </p>
+
+          <p>
+            Short URL:{" "}
+            <a
+              href={`http://localhost:5000/${item.shortCode}`}
+              onClick={() => handleShortUrlClick(item.shortCode)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              http://localhost:5000/{item.shortCode}
+            </a>
+          </p>
+
+          <p>
+            Clicks: {item.clicks}
+          </p>
+
+          <hr />
+        </div>
+      ))}
     </div>
   );
 }
