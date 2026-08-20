@@ -11,7 +11,7 @@ function App() {
   // Fetch all shortened URLs
   const getUrls = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/urls");
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/urls`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -36,7 +36,7 @@ function App() {
       setError("");
       setShortUrl("");
 
-      const response = await fetch("http://localhost:5000/api/urls", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/urls`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +68,7 @@ function App() {
   const deleteUrl = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/urls/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/urls/${id}`,
         {
           method: "DELETE",
         }
@@ -201,7 +201,7 @@ function App() {
                     className="copy-icon"
                     onClick={() => {
                       navigator.clipboard.writeText(
-                        `http://localhost:5000/${item.shortCode}`
+                        `${import.meta.env.VITE_API_URL}/${item.shortCode}`
                       );
                     }}
                     title="Copy URL"
@@ -234,12 +234,12 @@ function App() {
 
                   <a
                     className="short-link"
-                    href={`http://localhost:5000/${item.shortCode}`}
+                    href={`${import.meta.env.VITE_API_URL}/${item.shortCode}`}
                     target="_blank"
                     rel="noreferrer"
                     onClick={handleShortUrlClick}
                   >
-                    localhost:5000/{item.shortCode}
+                    {import.meta.env.VITE_API_URL}/{item.shortCode}
                   </a>
                 </div>
 

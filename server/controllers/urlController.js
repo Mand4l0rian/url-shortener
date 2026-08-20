@@ -16,7 +16,7 @@ const createShortUrl = async (req, res, next) => {
         res.status(201).json({
             originalUrl: url.originalUrl,
             shortCode: url.shortCode,
-            shortUrl: `http://localhost:5000/${url.shortCode}`
+            shortUrl: `${process.env.BASE_URL}/${url.shortCode}`
         });
 
     } catch (error) {
