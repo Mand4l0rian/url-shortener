@@ -18,7 +18,9 @@ const kafka = new Kafka({
 });
 
 const consumer = kafka.consumer({
-    groupId: "url-shortener-analytics",
+    kafkaJS: {
+        groupId: "url-shortener-analytics",
+    },
 });
 
 const run = async () => {
