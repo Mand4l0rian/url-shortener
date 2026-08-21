@@ -1,4 +1,4 @@
-const { Kafka } = require("@confluentinc/kafka-javascript");
+const { Kafka } = require("@confluentinc/kafka-javascript").KafkaJS;
 
 const kafka = new Kafka({
     kafkaJS: {
