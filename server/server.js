@@ -4,6 +4,10 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const errorHandler = require("./middleware/errorHandler");
 const { connectRedis } = require("./config/redis");
+const {
+    connectProducer,
+    disconnectProducer
+} = require("./kafka/producer");
 
 connectDB();
 connectRedis();
@@ -28,6 +32,22 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
+
+    await connectProducer();
 });
+
+const shutdown = async () => {
+    console.log("Shutting down server...");
+
+    await disconnectProducer();
+
+    server.close(() => {
+        console.log("Server closed");
+        process.exit(0);
+    });
+};
+
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);
