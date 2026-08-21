@@ -20,6 +20,7 @@ const kafka = new Kafka({
 const consumer = kafka.consumer({
     kafkaJS: {
         groupId: "url-shortener-analytics",
+        fromBeginning: true,
     },
 });
 
@@ -33,7 +34,6 @@ const run = async () => {
 
         await consumer.subscribe({
             topic: process.env.KAFKA_TOPIC || "url-clicks",
-            fromBeginning: true,
         });
 
         console.log("Analytics worker subscribed to url-clicks");
